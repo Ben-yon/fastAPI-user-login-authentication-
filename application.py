@@ -6,14 +6,16 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from models.user import User
+
+import models.user
+from models.user import User, engine
 # to get a string like this run:
 # openssl rand -hex 32
 SECRET_KEY = "f766ab971491b34c2cd89b48c03ca9af704f779e0dba3b9b805011c593e9473d"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-
+models.user.Base.metadata.create_all(bind=engine)
 # fake_users_db = {
 #     "johndoe": {
 #         "username": "johndoe",
@@ -36,13 +38,13 @@ class TokenData(BaseModel):
     username: Optional[str] = None
 
 
-# class User(BaseModel):
-#     username: str
-#     email: Optional[str] = None
-#     full_name: Optional[str] = None
-#     disabled: Optional[bool] = None
-# 
-# 
+class User(BaseModel):
+    username: str
+    email: Optional[str] = None
+    full_name: Optional[str] = None
+    disabled: Optional[bool] = None
+
+
 class UserInDB(User):
     hashed_password: str
 
