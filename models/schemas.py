@@ -10,6 +10,7 @@ class UserBase(BaseModel):
 class User(UserBase):
     id: int
     is_active: bool
+    username: str
 
 
 class Token(BaseModel):

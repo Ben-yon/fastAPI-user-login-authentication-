@@ -10,6 +10,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{db_name}"
     )
+    orm_mode = True
 
 
 SQLALCHEMY_DATABASE_URI = Config.SQLALCHEMY_DATABASE_URI

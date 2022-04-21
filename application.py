@@ -1,17 +1,20 @@
-from datetime import datetime, timedelta
-from typing import Optional
-
+from datetime import timedelta
+from sqlalchemy.orm import Session
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import BaseModel
 
 import models.user as user_model
 import models.schemas as user_schema
-from models.schemas import UserBase
+
 # to get a string like this run:
 # openssl rand -hex 32
-from services.user_service import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, \
-  authenticate_user, get_current_active_user
+from services.user_service import (
+    ACCESS_TOKEN_EXPIRE_MINUTES,
+    create_access_token,
+    authenticate_user,
+    get_current_active_user,
+    get_db,
+)
 
 user_model.Base.metadata.create_all(bind=user_model.engine)
 # fake_users_db = {
@@ -24,12 +27,11 @@ user_model.Base.metadata.create_all(bind=user_model.engine)
 #     }
 # }
 
-fake_users_db = user_model.User
+fake_users_db = get_db()
 User = user_schema.User
 
 
-
-# 
+#
 # class User(BaseModel):
 #     username: str
 #     email: Optional[str] = None
@@ -40,8 +42,11 @@ app = FastAPI()
 
 
 @app.post("/token", response_model=user_schema.Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+):
+    user = authenticate_user(db, form_data.username, form_data.password)
+    print(user)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
