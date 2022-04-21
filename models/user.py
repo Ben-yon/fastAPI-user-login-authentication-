@@ -1,10 +1,8 @@
 from config import SQLALCHEMY_DATABASE_URI
-import sqlalchemy
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from pydantic import BaseModel
 
 
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
@@ -20,6 +18,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     username = Column(String, index=True)
     password = Column(String, index=True)
+    hash_password = Column(String, index=True)
     is_active = Column(Boolean, default=True)
 
     

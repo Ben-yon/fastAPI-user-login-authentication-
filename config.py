@@ -11,4 +11,5 @@ class Config:
         f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{db_name}"
     )
 
+
 SQLALCHEMY_DATABASE_URI = Config.SQLALCHEMY_DATABASE_URI
