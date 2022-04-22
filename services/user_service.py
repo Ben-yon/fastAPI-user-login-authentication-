@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException, status
 
 import models.user
-from models.schemas import TokenData, UserInDB
+from models.schemas import TokenData
 
 import models.user as user_model
 import models.schemas as user_schema
@@ -44,7 +44,9 @@ def get_password_hash(password):
 
 
 def get_user(db: Session, username: str):
-    return db.query(models.user.User).filter(models.user.User.username == username).first()
+    return (
+        db.query(models.user.User).filter(models.user.User.username == username).first()
+    )
 
 
 def authenticate_user(fake_db: Session, username: str, password: str):
@@ -68,7 +70,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+async def get_current_user(
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
