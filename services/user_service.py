@@ -21,6 +21,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 fake_users_db = user_model.User
 User = user_schema.User
 
+# to get a string like this run:
+# openssl rand -hex 32
 SECRET_KEY = "f766ab971491b34c2cd89b48c03ca9af704f779e0dba3b9b805011c593e9473d"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30

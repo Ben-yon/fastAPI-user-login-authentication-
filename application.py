@@ -6,8 +6,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 import models.user as user_model
 import models.schemas as user_schema
 
-# to get a string like this run:
-# openssl rand -hex 32
+
 from services.user_service import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     create_access_token,
@@ -17,26 +16,9 @@ from services.user_service import (
 )
 
 user_model.Base.metadata.create_all(bind=user_model.engine)
-# fake_users_db = {
-#     "johndoe": {
-#         "username": "johndoe",
-#         "full_name": "John Doe",
-#         "email": "johndoe@example.com",
-#         "hashed_password": "$2a$10$dfudrkyR9cWu6ySgJDw/4efH9DkotPT9b5i7HKnzPJIaUe7LHGW1y",
-#         "disabled": False,
-#     }
-# }
 
-fake_users_db = get_db()
 User = user_schema.User
 
-
-#
-# class User(BaseModel):
-#     username: str
-#     email: Optional[str] = None
-#     full_name: Optional[str] = None
-#     disabled: Optional[bool] = None
 
 app = FastAPI()
 
